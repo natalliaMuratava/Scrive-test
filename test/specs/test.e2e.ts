@@ -1,6 +1,6 @@
 // test/signingDocument.test.ts
 import { expect } from '@wdio/globals';
-import SigningDocumentPage from '../pageobjects/signed.document.page';
+import SigningDocumentPage from '../pageobjects/form.page';
 import DocumentSignedPage from '../pageobjects/signingDocument.page';
 
 describe('Signing Document Page', () => {
