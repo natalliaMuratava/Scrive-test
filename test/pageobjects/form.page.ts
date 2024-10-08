@@ -1,67 +1,68 @@
 import { browser } from '@wdio/globals';
 import fs from 'fs';
 import path from 'path';
+import { SIGN_DOCUMENT_URL } from '../constants';
 
 export default class FormPage {
-    private url: string = 'https://staging.scrive.com/t/9221714692410699950/7348c782641060a9'; // URL страницы
     private screenshotDir: string = path.join(__dirname, 'screenshots');
 
     get arrowText() {
-        return $('.arrowtext'); // Селектор для текста стрелки
+        return $('.arrowtext');
+    }
+
+    get aboutYouSection() {
+        return $('div.section.extradetails');
     }
 
     get fullNameInput() {
-        return $('input#name'); // Селектор для инпута имени
+        return $('input#name');
     }
 
     get nextButton() {
-        return $('a[role="button"] span'); // Селектор для кнопки "Next"
+        return $('a[role="button"] span');
     }
 
     get modal() {
-        return $('.section.sign.above-overlay'); // Селектор для модального окна
+        return $('.section.sign.above-overlay');
     }
 
     get signButton() {
-        return $('a.sign-button'); // Селектор для кнопки подписания
+        return $('a.sign-button');
     }
 
     get confirmationTextElement() {
-        return $('h1.follow span'); // Селектор для элемента подтверждения
+        return $('h1.follow span');
     }
 
     public async open() {
-        await browser.url(this.url); // Открытие страницы
+        await browser.url(SIGN_DOCUMENT_URL);
     }
 
-    public async clickArrow() {
-        await this.arrowText.isDisplayed(); // Ждем, чтобы стрелка стала кликабельной
-        await this.arrowText.click(); // Кликаем по стрелке
+    public async goToAboutYouSection() {
+        await this.arrowText.click();
+        await this.aboutYouSection.waitForDisplayed();
     }
 
-    public async fillFullName() {
-        await this.fullNameInput.isDisplayed(); // Ожидаем, что инпут будет видим
-        await this.fullNameInput.setValue("Natallia"); // Заполняем инпут
+    public async setFullName(fullName: string) {
+        await this.fullNameInput.waitForDisplayed();
+        await this.fullNameInput.setValue(fullName);
     }
 
     public async clickNextButton() {
-        await this.nextButton.isDisplayed(); // Ждем, чтобы кнопка стала кликабельной
-        await this.nextButton.click(); // Кликаем по кнопке "Next"
+        await this.nextButton.waitForClickable();
+        await this.nextButton.click();
     }
 
-    public async makeModalScreenshot() {
-        if (!fs.existsSync(this.screenshotDir)) { // Проверяем, существует ли директория для скриншотов
-            fs.mkdirSync(this.screenshotDir); // Если нет, создаем её
+    public async clickSignButton() {
+        await this.signButton.waitForClickable();
+        await this.signButton.click();
+    }
+
+    public async takeScreenshot(filename: string) {
+        const screenshotPath = path.join(this.screenshotDir, filename);
+        if (!fs.existsSync(this.screenshotDir)) {
+            fs.mkdirSync(this.screenshotDir, { recursive: true });
         }
-
-        await this.modal.isDisplayed(); // Ожидаем, пока модальное окно станет видимым
-
-        const screenshotPath = path.join(this.screenshotDir, 'confirmation-modal.png'); // Путь для скриншота
-        await this.modal.saveScreenshot(screenshotPath); // Сохраняем скриншот
-    }
-
-    public async signDocument() {
-        await this.signButton.isDisplayed(); // Ждем, чтобы кнопка подписания стала кликабельной
-        await this.signButton.click(); // Кликаем по кнопке подписания
+        await browser.saveScreenshot(screenshotPath);
     }
 }
