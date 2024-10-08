@@ -1,6 +1,6 @@
 
 # Scrive test automation framework
-Testing framework for Scrive test application using WebdriverIO
+Testing framework for Scrive test web application using WebdriverIO
 
 ---
 
@@ -32,7 +32,7 @@ This framework contains configuration files, page objects, test data, test cases
 
 1. Clone the project to your local machine using the "git clone" command
 ```
-    example: git clone  https://github.com/natalliaMuratava/Scrive-test.git 
+    git clone  https://github.com/natalliaMuratava/Scrive-test.git 
 ```
 Run tests on your local machine
 ```
