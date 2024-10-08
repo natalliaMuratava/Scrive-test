@@ -55,7 +55,16 @@ export const config: WebdriverIO.Config = {
         // capabilities for local browser web tests
         browserName: 'chrome', // or "firefox", "microsoftedge", "safari"
         'goog:chromeOptions': {
-            args: ['--start-maximized'] // Максимизация окна
+            args: [
+                '--start-maximized',
+                '--disable-gpu',
+                '--no-sandbox',
+                '--disable-background-networking',    
+                '--disable-background-timer-throttling', 
+                '--disable-extensions',               
+                '--disable-software-rasterizer',
+                '--disable-dev-shm-usage'
+            ] // Максимизация окна
         }
     }],
 
