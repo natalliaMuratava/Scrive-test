@@ -1,9 +1,10 @@
-import { browser } from '@wdio/globals';
-import fs from 'fs';
+import BasePage from './base.page';
 import path from 'path';
-import { SIGN_DOCUMENT_URL } from '../constants';
+import fs from 'fs';
+import { CONFIRMATION_MODAL_FILE, SIGN_DOCUMENT_URL } from '../constants';
 
-export default class FormPage {
+export default class FormPage extends BasePage {
+    private url: string = SIGN_DOCUMENT_URL;
     private screenshotDir: string = path.join(__dirname, 'screenshots');
 
     get arrowText() {
@@ -15,27 +16,27 @@ export default class FormPage {
     }
 
     get fullNameInput() {
-        return $('input#name');
+        return $('input#name'); 
     }
 
     get nextButton() {
-        return $('a[role="button"] span');
+        return $('a[role="button"] span'); 
     }
 
     get modal() {
-        return $('.section.sign.above-overlay');
+        return $('.section.sign.above-overlay'); 
     }
 
     get signButton() {
-        return $('a.sign-button');
+        return $('a.sign-button'); 
     }
 
     get confirmationTextElement() {
-        return $('h1.follow span');
+        return $('h1.follow span'); 
     }
 
     public async open() {
-        await browser.url(SIGN_DOCUMENT_URL);
+        await super.open(this.url);
     }
 
     public async goToAboutYouSection() {
@@ -43,26 +44,16 @@ export default class FormPage {
         await this.aboutYouSection.waitForDisplayed();
     }
 
-    public async setFullName(fullName: string) {
-        await this.fullNameInput.waitForDisplayed();
-        await this.fullNameInput.setValue(fullName);
-    }
+    public async makeModalScreenshot() {
+        await this.modal.scrollIntoView();
+        await this.modal.waitForDisplayed({ timeout: 5000 });
 
-    public async clickNextButton() {
-        await this.nextButton.waitForClickable();
-        await this.nextButton.click();
-    }
-
-    public async clickSignButton() {
-        await this.signButton.waitForClickable();
-        await this.signButton.click();
-    }
-
-    public async takeScreenshot(filename: string) {
-        const screenshotPath = path.join(this.screenshotDir, filename);
         if (!fs.existsSync(this.screenshotDir)) {
             fs.mkdirSync(this.screenshotDir, { recursive: true });
         }
-        await browser.saveScreenshot(screenshotPath);
+
+        const screenshotPath = path.join(this.screenshotDir, CONFIRMATION_MODAL_FILE);
+
+        await this.modal.saveScreenshot(screenshotPath);
     }
 }

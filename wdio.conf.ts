@@ -64,7 +64,7 @@ export const config: WebdriverIO.Config = {
                 '--disable-extensions',               
                 '--disable-software-rasterizer',
                 '--disable-dev-shm-usage'
-            ] // Максимизация окна
+            ] 
         }
     }],
 
@@ -275,8 +275,9 @@ export const config: WebdriverIO.Config = {
      * @param {Array.<Object>} capabilities list of capabilities details
      * @param {Array.<String>} specs List of spec file paths that ran
      */
-    // afterSession: function (config, capabilities, specs) {
-    // },
+    afterSession: function (config, capabilities, specs) {
+        browser.deleteSession();
+    },
     /**
      * Gets executed after all workers got shut down and the process is about to exit. An error
      * thrown in the onComplete hook will result in the test run failing.
